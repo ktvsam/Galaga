@@ -41,10 +41,9 @@ class Player extends Canvas
     {
         if(getX()<600)
             setX( getX() + speed );
-        // keep the paddle from going off the screen to the right.
+        // change number to keep from going off the screen
     }
 
-    //overidde paint to draw your Paddle
     public void paint( Graphics window )
     {
 
