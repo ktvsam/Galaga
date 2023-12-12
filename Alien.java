@@ -1,11 +1,28 @@
 import java.awt.*;
 import java.awt.geom.AffineTransform;
+import java.awt.geom.Path2D;
 import java.awt.geom.Point2D;
 import java.util.*;
 import java.awt.event.*;
 import javax.swing.*;
 
 
+/*
+* Directions:
+*          Make the brick extend Block
+*
+*          Write the Brick constructor that takes an x, y, w, h to create a block.
+*
+*          Override the paint method to draw a Brick
+
+
+           Choose to draw or import an image.
+*
+*          Go to BreakOut and do Step 3, then test in the runner.
+*
+*          If all works correctly then move on to Steps 4 - 6 in BreakOut.
+*/
+//https://youtu.be/AheaTd_l5Is?t=152
 class Alien extends Canvas {
 
 
@@ -32,10 +49,10 @@ class Alien extends Canvas {
         y+=ysp;
         System.out.println("AFTER: " + getX() + " " + getY());
     }
+    //paint rotate spins it
     public void paintRotate( Graphics window){
         Graphics2D g2 = (Graphics2D) window;
         Image img1 = Toolkit.getDefaultToolkit().getImage("david.png"); //use .gif or .png, you can choose the image
-//        AffineTransform rotation = AffineTransform.rotate(Math.toRadians(degrees),getX(),getY());
         AffineTransform rotation = new AffineTransform();
         rotation.translate(getX(), getY());
         rotation.rotate(Math.toRadians(degrees));
@@ -55,26 +72,28 @@ class Alien extends Canvas {
         g2.drawImage(img1, getX(), getY(), getW(), getH(), this);
 
     }
-    // public void enterUpLeftLine(){
-    //     int slope = (800 - getY()) / (500 - getX());
-    //     int yint = (slope)*(getX()) - getY();
-    //     setX(getX()-xsp);
-    //     setY(slope*getX()-yint);
-    //     System.out.println(getX());
-    //     System.out.println(getY());
-    // }
-    // public void enterDownLeftLine(){
+    //path takes the ship to a point
+    public void path(int xx, int yy){
+        double distance = Math.sqrt(Math.abs(getX()-xx)*Math.abs(getX()-xx)+(getY()-yy)*(getY()-yy));
+        double moveX = xsp * (xx-getX()) / distance;
+        double moveY = ysp * (yy-getY()) / distance;
 
-    //     int slope = (800 - getY()) / (500 - getX());
-    //     int yint = (slope)*(getX()) + getY();
-    //     setX(getX()+xsp);
-    //     setY(slope*getX()+yint);
-    //     System.out.println(getX());
-    //     System.out.println(getY());
-    // }
-    // public void enterLeftLoop(){
+        setX(getX() + (int) moveX);
+        setY(getY() + (int) moveY);
+    }
+    public void paintPath( Graphics window , int xx, int yy)
+    {
+        Graphics2D g2 = (Graphics2D) window;
+        Image img1 = Toolkit.getDefaultToolkit().getImage("david.png"); //use .gif or .png, you can choose the image
+        Path2D.Double n= new Path2D.Double();
 
-    // }
+        setX(getX()+xsp);
+        setY(getY()-ysp);
+        g2.drawImage(img1, getX(), getY(), getW(), getH(), this);
+
+
+    }
+
     public int getX( ){ return x; }
     public void setX( int ex ){ x = ex; }
     public int getY( ){ return y; }
@@ -87,6 +106,12 @@ class Alien extends Canvas {
         return new Rectangle(h, w);
     }
 
+
+    public void movement1(){
+        this.setY(getY() + ysp*(int)Math.sin(30));
+
+
+    }
     public boolean intersects( Alien other )
     {
         Rectangle block = new Rectangle(x, y, w, h);
