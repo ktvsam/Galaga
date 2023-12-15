@@ -11,7 +11,7 @@ public class Game extends JPanel implements Runnable, KeyListener
 	private boolean[] keys; Player player; private Alien[][] aliens; private Integer[][][] alienCoords;
 	private boolean playing; private int bgscroll; private int twinklycounter; private int cooldown; private int alienTimer;
 	//private ArrayList<Laser> lasers;
-	private ArrayList<Blaster> blasters; private int lives; private int startLevel; int score; int highScore; int alienTarget; boolean makeNew;
+	private ArrayList<Blaster> blasters; private int lives; private boolean startLevel; int score; int highScore; int alienTarget; boolean makeNew;
 	private List<Box> stuff;	
 	
 	public Game ()
@@ -26,7 +26,7 @@ public class Game extends JPanel implements Runnable, KeyListener
 		blasters = new ArrayList<Blaster>();
 		cooldown = 0;                  //blaster cooldown
 		lives = 2;
-		startLevel = 800;            //timer for "new level" screen
+		startLevel = false;            //timer for "new level" screen
 		score = 0;
 		aliens = new Alien[5][10];    //holds actual aliens
 		alienCoords = new Integer[5][10][2]; // Integer[Alien[] x coord][Alien[] y coord][x(0) or y(1)]
@@ -95,33 +95,80 @@ public class Game extends JPanel implements Runnable, KeyListener
 			}
 			Image img1 = Toolkit.getDefaultToolkit().getImage("bg.png"); //use .gif or .png, you can choose the image
 			g2.drawImage(img1, 0, bgscroll, 1728, 13440, this);
-			if (startLevel > 0) {
+			if (!startLevel) {
 				window.setColor(Color.CYAN);
-				window.drawString("NEW LEVEL", 600, 100);
-				startLevel--;
+				window.drawString("PRESS SPACE TO PLAY NEXT LEVEL", 600, 100);
 				player.paint(window);
 				alienTimer = 0;
+				if(keys[0]){
+					startLevel = true;
+					keys[0] = false;
+				}
 			}
 			else {
 				if(alienTimer == 0){
 					int ex = 0;
 					if (makeNew){
 						for(int c=0;c<10;c++){
-							aliens[4][c] = new Alien((1728-264) - 200 + ex,900,80,80,6);
+							aliens[3][c] = new Alien((1728-264) - 100 + ex,900,80,80,6);
 							ex += 90;
+							System.out.println(ex);
 						}
 						makeNew = false;
+						System.out.println("making new");
 					}
 					else{
-						for(int c=0;c<10;c++){
-							if(aliens[4][c] != null && !aliens[4][c].getPath(aliens[4][c].getX(),aliens[4][c].getY(),500,500)){
-								aliens[4][c].path(alienCoords[4][c][0],alienCoords[4][c][1]);
+						boolean arrived = false;
+						for(int c=9;c>=0;c--){
+							if(aliens[3][c] != null && aliens[3][c].getPath(aliens[3][c].getX(),aliens[3][c].getY(),alienCoords[3][c][0],alienCoords[3][c][1])){
+								arrived = true;
+								System.out.println("making arrived true");
 							}
+							else if(aliens[3][c] != null && !aliens[3][c].getPath(aliens[3][c].getX(),aliens[3][c].getY(),alienCoords[3][c][0],alienCoords[3][c][1])){
+								aliens[3][c].path(alienCoords[3][c][0],alienCoords[3][c][1]);
+								arrived = false;
+							}
+						}
+						if(arrived == true){
+							makeNew = true;
+							alienTimer++;
+							System.out.println("all arrived");
 						}
 					}
 				}
-
-
+				else if(alienTimer == 200){
+					int ex = 0;
+					if (makeNew){
+						for(int c=0;c<10;c++){
+							aliens[4][c] = new Alien(-1050 + ex,900,80,80,6);
+							ex += 90;
+						}
+						makeNew = false;
+						System.out.println("making new");
+					}
+					else{
+						boolean arrived = false;
+						for(int c=0;c<10;c++){
+							if(aliens[4][c] != null && aliens[4][c].getPath(aliens[4][c].getX(),aliens[4][c].getY(),alienCoords[4][c][0],alienCoords[4][c][1])){
+								arrived = true;
+								System.out.println("making arrived true");
+							}
+							else if(aliens[4][c] != null && !aliens[4][c].getPath(aliens[4][c].getX(),aliens[4][c].getY(),alienCoords[4][c][0],alienCoords[4][c][1])){
+								aliens[4][c].path(alienCoords[4][c][0],alienCoords[4][c][1]);
+								arrived = false;
+							}
+						}
+						if(arrived == true){
+							makeNew = true;
+							alienTimer++;
+							System.out.println("all arrived");
+						}
+					}
+				}
+				else{
+					alienTimer++;
+				}
+				System.out.println(alienTimer);
 				//add other alien timers
 				for (int b = 0; b < blasters.size(); b++) {
 					blasters.get(b).move();

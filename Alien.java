@@ -30,7 +30,7 @@ class Alien extends Canvas {
     private boolean loop;
     private double degrees;
 
-    public Alien(int ex, int wy, int wd, int ht, int sp, double dg) {
+    public Alien(int ex, int wy, int wd, int ht, int sp) {
         x = ex;
         y = wy;
         w = wd;
@@ -52,7 +52,7 @@ class Alien extends Canvas {
     //paint rotate spins it
     public void paintRotate( Graphics window){
         Graphics2D g2 = (Graphics2D) window;
-        Image img1 = Toolkit.getDefaultToolkit().getImage("david.png"); //use .gif or .png, you can choose the image
+        Image img1 = Toolkit.getDefaultToolkit().getImage("bug1.png"); //use .gif or .png, you can choose the image
         AffineTransform rotation = new AffineTransform();
         rotation.translate(getX(), getY());
         rotation.rotate(Math.toRadians(degrees));
@@ -68,31 +68,37 @@ class Alien extends Canvas {
     public void paint( Graphics window )
     {
         Graphics2D g2 = (Graphics2D) window;
-        Image img1 = Toolkit.getDefaultToolkit().getImage("david.png"); //use .gif or .png, you can choose the image
+        Image img1 = Toolkit.getDefaultToolkit().getImage("bug1.png"); //use .gif or .png, you can choose the image
         g2.drawImage(img1, getX(), getY(), getW(), getH(), this);
 
     }
     //path takes the ship to a point
     public void path(int xx, int yy){
-        double distance = Math.sqrt(Math.abs(getX()-xx)*Math.abs(getX()-xx)+(getY()-yy)*(getY()-yy));
-        double moveX = xsp * (xx-getX()) / distance;
-        double moveY = ysp * (yy-getY()) / distance;
+            double distance = Math.sqrt(Math.abs(getX()-xx)*Math.abs(getX()-xx)+(getY()-yy)*(getY()-yy));
+            double moveX = xsp * (xx-getX()) / distance;
+            double moveY = ysp * (yy-getY()) / distance;
 
-        setX(getX() + (int) moveX);
-        setY(getY() + (int) moveY);
+            setX(getX() + (int) moveX);
+            setY(getY() + (int) moveY);
     }
-    public void paintPath( Graphics window , int xx, int yy)
-    {
-        Graphics2D g2 = (Graphics2D) window;
-        Image img1 = Toolkit.getDefaultToolkit().getImage("david.png"); //use .gif or .png, you can choose the image
-        Path2D.Double n= new Path2D.Double();
-
-        setX(getX()+xsp);
-        setY(getY()-ysp);
-        g2.drawImage(img1, getX(), getY(), getW(), getH(), this);
-
-
+    public boolean getPath(int curx, int cury, int targx, int targy){
+        if(curx == targx && cury == targy){
+            return true;
+        }
+        return false;
     }
+//    public void paintPath( Graphics window , int xx, int yy)
+//    {
+//        Graphics2D g2 = (Graphics2D) window;
+//        Image img1 = Toolkit.getDefaultToolkit().getImage("david.png"); //use .gif or .png, you can choose the image
+//        Path2D.Double n= new Path2D.Double();
+//
+//        setX(getX()+xsp);
+//        setY(getY()-ysp);
+//        g2.drawImage(img1, getX(), getY(), getW(), getH(), this);
+//
+//
+//    }
 
     public int getX( ){ return x; }
     public void setX( int ex ){ x = ex; }
@@ -102,8 +108,8 @@ class Alien extends Canvas {
     public int getH(){ return h; }
     public void setLoop( boolean bo ){ loop = bo; }
     public boolean getLoop(){ return loop; }
-    public Rectangle getRec() {
-        return new Rectangle(h, w);
+    public Rectangle getRect() {
+        return new Rectangle(x,y,w,h);
     }
 
 

@@ -29,7 +29,9 @@ class Blaster extends Canvas
     public void setH( int ht ){ y = ht; }
     public int getSpeed(){ return speed; }
     public void setSpeed( int sp ){ speed = sp; }
-
+    public Rectangle getRect(){
+        return new Rectangle(x,y,w,h);
+    }
 
     public boolean intersects( Blaster other )
     {
@@ -49,10 +51,10 @@ class Blaster extends Canvas
     public void paint( Graphics window )
     {
 
-//        window.setColor(Color.BLACK);
-//        window.drawRect(getX(), getY(), getW(), getH());
+//        window.setColor(Color.GREEN);
+//        window.fillRect(getX(), getY(), getW(), getH());
         Graphics2D g2 = (Graphics2D) window;
-        Image img1 = Toolkit.getDefaultToolkit().getImage("david.png"); //use .gif or .png, you can choose the image
+        Image img1 = Toolkit.getDefaultToolkit().getImage("blaster.png");
         g2.drawImage(img1, getX(), getY(), getW(), getH(), this);
 
     }

@@ -31,25 +31,28 @@ class Player extends Canvas
 
     public void goLeft()
     {
-        if(getX()>0)
+        if(getX()>264){
             setX( getX() - speed );
-
+        }
     }
 
 
     public void goRight()
     {
-        if(getX()<600)
+        if(getX()<1464-getW())
             setX( getX() + speed );
-        // change number to keep from going off the screen
+        // keep the paddle from going off the screen to the right.
+    }
+    public Rectangle getRect(){
+        return new Rectangle(x,y,w,h);
     }
 
+    //overidde paint to draw your Paddle
     public void paint( Graphics window )
     {
 
-        //find and image for your paddle and put it here
         Graphics2D g2 = (Graphics2D) window;
-        Image img1 = Toolkit.getDefaultToolkit().getImage("bob.png"); //use .gif or .png, you can choose the image
+        Image img1 = Toolkit.getDefaultToolkit().getImage("ship.png");
         g2.drawImage(img1, getX(), getY(), getW(), getH(), this);
 
     }
