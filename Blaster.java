@@ -6,16 +6,18 @@ import javax.swing.*;
 
 class Blaster extends Canvas
 {
-    private int x, y, w, h, speed;
+    private int x, y, w, h, speed; private boolean player; private int xsped;
 
 
-    public Blaster( int ex, int wy, int wd, int ht, int sp)
+    public Blaster( int ex, int wy, int wd, int ht, int sp, boolean p, int xsp)
     {
         x=ex;
         y=wy;
         w=wd;
         h=ht;
         speed=sp;
+        xsped = xsp;
+        player = p;
     }
 
 
@@ -29,7 +31,9 @@ class Blaster extends Canvas
     public void setH( int ht ){ y = ht; }
     public int getSpeed(){ return speed; }
     public void setSpeed( int sp ){ speed = sp; }
-
+    public Rectangle getRect(){
+        return new Rectangle(x,y,w,h);
+    }
 
     public boolean intersects( Blaster other )
     {
@@ -39,21 +43,39 @@ class Blaster extends Canvas
         return yu.intersects(tu);
 
     }
+    public boolean intersects(Rectangle oder){
+        if(this.getRect().intersects(oder)){
+            return true;
+        }
+        return false;
+    }
 
     public void move(){
-        if(getY()> -getH())
+        if(player){
             setY(getY()-speed);
+        }
+        else{
+            setY(getY()+speed);
+        }
+        //setX(getX()+xsped);
     }
 
 
     public void paint( Graphics window )
     {
 
-//        window.setColor(Color.BLACK);
-//        window.drawRect(getX(), getY(), getW(), getH());
-        Graphics2D g2 = (Graphics2D) window;
-        Image img1 = Toolkit.getDefaultToolkit().getImage("david.png"); //use .gif or .png, you can choose the image
-        g2.drawImage(img1, getX(), getY(), getW(), getH(), this);
+//        window.setColor(Color.GREEN);
+//        window.fillRect(getX(), getY(), getW(), getH());
+        if(player){
+            Graphics2D g2 = (Graphics2D) window;
+            Image img1 = Toolkit.getDefaultToolkit().getImage("blaster.png");
+            g2.drawImage(img1, getX(), getY(), getW(), getH(), this);
+        }
+        else{
+            Graphics2D g2 = (Graphics2D) window;
+            Image img1 = Toolkit.getDefaultToolkit().getImage("laser.png");
+            g2.drawImage(img1, getX(), getY(), getW(), getH(), this);
+        }
 
     }
 }
